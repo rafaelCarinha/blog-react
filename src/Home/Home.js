@@ -11,7 +11,7 @@ export default class Home extends Component {
                     <h1>Home page</h1>
                     <p>A simple app showing react button click navigation</p>
                     <form>
-                        <Button variant="btn btn-success" onClick={() => history.push('/Products')}>Click button to view products</Button>
+                        <Button variant="btn btn-success" onClick={() => history.push('/Posts')}>Click button to view Blog Posts</Button>
                     </form>
                 </div>
             </div>

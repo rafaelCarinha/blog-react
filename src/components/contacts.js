@@ -8,7 +8,7 @@ const Contacts = ({contacts}) => {
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{contact.name}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{contact.tittle}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{contact.title}</h6>
                         {contact.comments.map((comment) => (
                             <div>
                                 <h5 className="card-title">Comment</h5>

@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
+import { config } from '../constants'
+
+const url = config.url.API_URL+'/api/v1/post/create';
 
 class PostForm extends Component {
+
     constructor(props) {
         super(props);
-        this.state = {name: '', tittle: '', content: ''};
-
+        this.state = {name: '', title: '', content: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -14,20 +17,34 @@ class PostForm extends Component {
     }
 
     handleSubmit(event) {
-
+        alert(url)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.state)
         };
 
-        fetch('/api/v1/post/create', requestOptions)
-            .then(function(response) {
-            console.log(response)
-            return response.json();
-        });
+        fetch(url, requestOptions)
+            .then(async response => {
+                const data = await response.json();
 
-        alert('A new Blog Post was submitted: ' + this.state.name);
+                // check for error response
+                if (!response.ok) {
+                    alert('Error Alert: '+url);
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                } else {
+                    alert('A new Blog Post was submitted: ' + this.state.name);
+                }
+
+                //this.setState({ postId: data.id })
+            })
+            .catch(error => {
+                this.setState({ errorMessage: error.toString() });
+                alert('Catch Error Alert: '+error);
+                console.error('There was an error!', error);
+        });
 
         event.preventDefault();
     }
@@ -40,8 +57,8 @@ class PostForm extends Component {
                     <input type="text" value={this.state.name} name="name" onChange={this.handleChange} />
                 </label>
                 <label>
-                    Tittle:
-                    <input type="text" value={this.state.tittle} name="tittle" onChange={this.handleChange} />
+                    Title:
+                    <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
                 </label>
                 <label>
                     Content:

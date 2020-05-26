@@ -7,7 +7,7 @@ const Posts = ({posts}) => {
             {posts.map((post) => (
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{post.tittle}</h5>
+                        <h5 class="card-title">{post.title}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{post.content}</h6>
                         <h4 className="card-title">Comments:</h4>
                         {post.comments.map((comment) => (

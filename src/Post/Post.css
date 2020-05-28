@@ -1,0 +1,21 @@
+.Post .lander {
+    text-align: center;
+    padding: 80px 20px 80px 20px;
+}
+
+.Post .lander label {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    display:block;
+}
+
+.Post .lander p {
+    color: #999;
+}
+
+.Post .lander input {
+    display: inline-block;
+}
+
+
+

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { config } from '../constants'
+import { Editor } from '@tinymce/tinymce-react';
+import "./Post.css";
 
 const url = config.url.API_URL+'/api/v1/post/create';
 
@@ -14,6 +16,12 @@ class PostForm extends Component {
 
     handleChange(event) {
         this.setState({ [event.target.name] : event.target.value });
+    }
+
+    handleEditorChange = (editorContent, editor) => {
+        this.setState({content: editorContent});
+        //this.state.content = content;
+        console.log('Content was updated:', editorContent);
     }
 
     handleSubmit(event) {
@@ -51,21 +59,43 @@ class PostForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Name:
-                    <input type="text" value={this.state.name} name="name" onChange={this.handleChange} />
-                </label>
-                <label>
-                    Title:
-                    <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
-                </label>
-                <label>
-                    Content:
-                    <input type="text" value={this.state.content} name="content" onChange={this.handleChange} />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
+            <div className="Post">
+                <div className="lander">
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            Name:
+                        </label>
+                        <input type="text" value={this.state.name} name="name" onChange={this.handleChange} />
+                        <label>
+                            Title:
+                        </label>
+                        <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
+                        <input type="hidden" value={this.state.content} name="content" onChange={this.handleChange}/>
+                        <label>
+                            Content:
+                        </label>
+                        <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4'
+                            initialValue=""
+                            init={{
+                                height: 500,
+                                menubar: false,
+                                branding: false,
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount'
+                                ],
+                                toolbar:
+                                    'undo redo | formatselect | bold italic backcolor | \
+                                    alignleft aligncenter alignright alignjustify | \
+                                    bullist numlist outdent indent | removeformat | help'
+                            }}
+                            onEditorChange={this.handleEditorChange}
+                        />
+                        <input type="submit" value="Submit" />
+                    </form>
+                </div>
+            </div>
         );
     }
 }

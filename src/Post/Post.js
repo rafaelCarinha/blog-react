@@ -1,13 +1,14 @@
 import React from 'react'
 
-const Posts = ({posts}) => {
+const Post = ({post}) => {
     return (
         <div>
             <center><h1>Blog Post List</h1></center>
-            {posts.map((post, index) => (
+            {post.map((post, index) => (
                 <div className="card" key={index}>
                     <div className="card-body">
                         <h5 className="card-title">{post.title}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted">{post.content}</h6>
                         <h4 className="card-title">Comments:</h4>
                         {post.comments.map((comment) => (
                             <div>
@@ -21,4 +22,4 @@ const Posts = ({posts}) => {
     )
 };
 
-export default Posts
+export default Post

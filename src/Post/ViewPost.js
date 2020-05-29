@@ -2,16 +2,29 @@ import React, {Component} from 'react';
 import { config } from '../constants'
 import { Editor } from '@tinymce/tinymce-react';
 import "./Post.css";
+import * as QueryString from "query-string"
+import history from "../history";
+import {Button} from "react-bootstrap";
 
-const url = config.url.API_URL+'/api/v1/post/create';
+const url = config.url.API_URL;
 
-class PostForm extends Component {
+class ViewPost extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {name: '', title: '', content: ''};
+        this.state = {id: '', name: '', title: '', content: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        const params = QueryString.parse(this.props.location.search);
+        fetch(url+'/api/v1/post/findById?id='+params.id, { credentials: 'include' })
+            .then(res => res.json())
+            .then((data) => {
+                this.setState({ id: data.id, name: data.name, title: data.title, content: data.content })
+            })
+            .catch(console.log)
     }
 
     handleChange(event) {
@@ -45,7 +58,7 @@ class PostForm extends Component {
                     alert('A new Blog Post was submitted: ' + this.state.name);
                 }
 
-                this.props.history.push('/ViewPost?id=1');
+                this.props.history.push('/dashboard');
             })
             .catch(error => {
                 this.setState({ errorMessage: error.toString() });
@@ -62,21 +75,25 @@ class PostForm extends Component {
                 <div className="lander">
                     <form onSubmit={this.handleSubmit}>
                         <label>
+                            Id: {this.state.id}
+                        </label>
+                        <input type="hidden" value={this.state.id} name="id" onChange={this.handleChange}/>
+                        <label>
                             Name:
                         </label>
-                        <input type="text" value={this.state.name} name="name" onChange={this.handleChange} />
+                        <input type="text" value={this.state.name} name="name" onChange={this.handleChange} readOnly={true}/>
                         <label>
                             Title:
                         </label>
-                        <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
+                        <input type="text" value={this.state.title} name="title" onChange={this.handleChange} readOnly={true}/>
                         <input type="hidden" value={this.state.content} name="content" onChange={this.handleChange}/>
                         <label>
                             Content:
                         </label>
-                        <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4'
-                            initialValue=""
+                        <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4' disabled={true}
+                            initialValue={this.state.content}
                             init={{
-                                min_height: 500,
+                                height: 500,
                                 menubar: false,
                                 branding: false,
                                 autoresize_on_init: true,
@@ -89,11 +106,11 @@ class PostForm extends Component {
                                 toolbar:
                                     'undo redo | formatselect | bold italic backcolor | \
                                     alignleft aligncenter alignright alignjustify | \
-                                    bullist numlist outdent indent | removeformat | help '
+                                    bullist numlist outdent indent | removeformat | help'
                             }}
                             onEditorChange={this.handleEditorChange}
                         />
-                        <input type="submit" value="Submit" />
+                        <Button variant="btn btn-success" onClick={() => history.push('/PostForm')}>Edit Blog Post.</Button>
                     </form>
                 </div>
             </div>
@@ -101,4 +118,4 @@ class PostForm extends Component {
     }
 }
 
-export default PostForm;
+export default ViewPost;

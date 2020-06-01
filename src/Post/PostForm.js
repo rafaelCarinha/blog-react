@@ -20,11 +20,9 @@ class PostForm extends Component {
 
     handleEditorChange = (editorContent, editor) => {
         this.setState({content: editorContent});
-        console.log('Content was updated:', editorContent);
     }
 
     handleSubmit(event) {
-        alert(url)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -45,7 +43,8 @@ class PostForm extends Component {
                     alert('A new Blog Post was submitted: ' + this.state.name);
                 }
 
-                this.props.history.push('/ViewPost?id=1');
+                this.props.history.push('/ViewPost?id='+ data.id);
+
             })
             .catch(error => {
                 this.setState({ errorMessage: error.toString() });
@@ -58,45 +57,49 @@ class PostForm extends Component {
 
     render() {
         return (
-            <div className="Post">
-                <div className="lander">
+            <React.Fragment>
+                <div className="Post">
                     <form onSubmit={this.handleSubmit}>
-                        <label>
-                            Name:
-                        </label>
-                        <input type="text" value={this.state.name} name="name" onChange={this.handleChange} />
-                        <label>
-                            Title:
-                        </label>
-                        <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
-                        <input type="hidden" value={this.state.content} name="content" onChange={this.handleChange}/>
-                        <label>
-                            Content:
-                        </label>
-                        <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4'
-                            initialValue=""
-                            init={{
-                                min_height: 500,
-                                menubar: false,
-                                branding: false,
-                                autoresize_on_init: true,
-                                plugins: [
-                                    'advlist autolink lists link image charmap print preview anchor',
-                                    'searchreplace visualblocks code fullscreen',
-                                    'insertdatetime media table paste code help wordcount',
-                                    'autoresize'
-                                ],
-                                toolbar:
-                                    'undo redo | formatselect | bold italic backcolor | \
-                                    alignleft aligncenter alignright alignjustify | \
-                                    bullist numlist outdent indent | removeformat | help '
-                            }}
-                            onEditorChange={this.handleEditorChange}
-                        />
+                        <div className="lander">
+                            <label>
+                                Name:
+                            </label>
+                            <input type="text" value={this.state.name} name="name" onChange={this.handleChange} />
+                            <label>
+                                Title:
+                            </label>
+                            <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
+                            <input type="hidden" value={this.state.content} name="content" onChange={this.handleChange}/>
+                            <label>
+                                Content:
+                            </label>
+                        </div>
+                        <div className="editor">
+                            <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4'
+                                    initialValue=""
+                                    init={{
+                                        height: 500,
+                                        menubar: false,
+                                        branding: false,
+                                        autoresize_on_init: false,
+                                        plugins: [
+                                            'advlist autolink lists link image charmap print preview anchor',
+                                            'searchreplace visualblocks code fullscreen',
+                                            'insertdatetime media table paste code help wordcount',
+                                        ],
+                                        toolbar:
+                                            'undo redo | formatselect | bold italic backcolor | \
+                                            alignleft aligncenter alignright alignjustify | \
+                                            bullist numlist outdent indent | removeformat | help ',
+                                        toolbar_location: 'top',
+                                    }}
+                                    onEditorChange={this.handleEditorChange}
+                            />
+                        </div>
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }

@@ -4,11 +4,15 @@ import Navigation from './components/Navbar';
 import Routes from './Routes';
 
 function App() {
+
     return (
-        <div className="App">
-            <Navigation />
-            <Routes />
-        </div>
+        <React.Fragment>
+            <div className="App">
+                <Navigation />
+                <Routes />
+            </div>
+        </React.Fragment>
+
     );
 }
 

@@ -3,10 +3,9 @@ import { config } from '../constants'
 import { Editor } from '@tinymce/tinymce-react';
 import "./Post.css";
 import * as QueryString from "query-string"
-import history from "../history";
-import {Button} from "react-bootstrap";
 
 const url = config.url.API_URL;
+const updateUrl = config.url.API_URL+'/api/v1/post/update';
 
 class ViewPost extends Component {
 
@@ -25,6 +24,7 @@ class ViewPost extends Component {
                 this.setState({ id: data.id, name: data.name, title: data.title, content: data.content })
             })
             .catch(console.log)
+
     }
 
     handleChange(event) {
@@ -33,32 +33,28 @@ class ViewPost extends Component {
 
     handleEditorChange = (editorContent, editor) => {
         this.setState({content: editorContent});
-        console.log('Content was updated:', editorContent);
     }
 
     handleSubmit(event) {
-        alert(url)
         const requestOptions = {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.state)
         };
 
-        fetch(url, requestOptions)
+        fetch(updateUrl, requestOptions)
             .then(async response => {
                 const data = await response.json();
 
                 // check for error response
                 if (!response.ok) {
-                    alert('Error Alert: '+url);
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 } else {
-                    alert('A new Blog Post was submitted: ' + this.state.name);
+                    alert('Blog Post Updated: ' + this.state.name);
                 }
 
-                this.props.history.push('/dashboard');
             })
             .catch(error => {
                 this.setState({ errorMessage: error.toString() });
@@ -72,47 +68,52 @@ class ViewPost extends Component {
     render() {
         return (
             <div className="Post">
+                <form onSubmit={this.handleSubmit}>
+                <div className="Fixed">
+                </div>
                 <div className="lander">
-                    <form onSubmit={this.handleSubmit}>
-                        <label>
-                            Id: {this.state.id}
-                        </label>
-                        <input type="hidden" value={this.state.id} name="id" onChange={this.handleChange}/>
-                        <label>
-                            Name:
-                        </label>
-                        <input type="text" value={this.state.name} name="name" onChange={this.handleChange} readOnly={true}/>
-                        <label>
-                            Title:
-                        </label>
-                        <input type="text" value={this.state.title} name="title" onChange={this.handleChange} readOnly={true}/>
-                        <input type="hidden" value={this.state.content} name="content" onChange={this.handleChange}/>
-                        <label>
-                            Content:
-                        </label>
-                        <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4' disabled={true}
+                    <label>
+                        Id: {this.state.id}
+                    </label>
+                    <input type="hidden" value={this.state.id} name="id" onChange={this.handleChange}/>
+                    <label>
+                        Name:
+                    </label>
+                    <input type="text" value={this.state.name} name="name" onChange={this.handleChange}/>
+                    <label>
+                        Title:
+                    </label>
+                    <input type="text" value={this.state.title} name="title" onChange={this.handleChange} />
+                    <input type="hidden" value={this.state.content} name="content" onChange={this.handleChange}/>
+                    <label>
+                        Content:
+                    </label>
+                </div>
+                <div className="editor">
+                    <Editor apiKey='h5emgghd607rtvcqj2iwnys2deuo08p3af08yx9dahq9l3e4'
                             initialValue={this.state.content}
+                            value={this.state.content}
                             init={{
                                 height: 500,
                                 menubar: false,
                                 branding: false,
-                                autoresize_on_init: true,
+                                autoresize_on_init: false,
                                 plugins: [
                                     'advlist autolink lists link image charmap print preview anchor',
                                     'searchreplace visualblocks code fullscreen',
                                     'insertdatetime media table paste code help wordcount',
-                                    'autoresize'
                                 ],
                                 toolbar:
                                     'undo redo | formatselect | bold italic backcolor | \
                                     alignleft aligncenter alignright alignjustify | \
-                                    bullist numlist outdent indent | removeformat | help'
+                                    bullist numlist outdent indent | removeformat | help ',
+                                toolbar_location: 'top',
                             }}
                             onEditorChange={this.handleEditorChange}
-                        />
-                        <Button variant="btn btn-success" onClick={() => history.push('/PostForm')}>Edit Blog Post.</Button>
-                    </form>
+                    />
                 </div>
+                    <input type="submit" value="Submit" />
+                </form>
             </div>
         );
     }

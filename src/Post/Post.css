@@ -1,11 +1,27 @@
+
 .Post {
     margin: auto;
     max-width: 850px;
 }
 
+.Post .Fixed {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 23px;
+}
+
 .Post .lander {
     text-align: center;
-    padding: 80px 20px 80px 20px;
+    padding: 80px 20px 0px 20px;
+}
+
+.Post .editor {
+    text-align: center;
+    height: 500px;
+    overflow: scroll;
 }
 
 .Post .lander label {
@@ -21,6 +37,8 @@
 .Post .lander input {
     display: inline-block;
 }
+
+
 
 
 
